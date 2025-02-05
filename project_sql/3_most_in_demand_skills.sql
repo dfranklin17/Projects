@@ -12,9 +12,8 @@ ON
     sj.skill_id = sd.skill_id
 WHERE
     job_title_short = 'Data Analyst' AND
-    job_work_from_home = true
+    job_location LIKE '%London%'
 GROUP BY
     skills
 ORDER BY
-    demand DESC
-LIMIT 5;
+    demand DESC;

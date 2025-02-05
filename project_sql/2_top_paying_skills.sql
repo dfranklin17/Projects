@@ -11,6 +11,7 @@ SELECT
     job_id,
     c.name AS company_name,
     job_title,
+    job_location,
     salary_year_avg
 FROM    
     job_postings_fact jp
@@ -20,7 +21,7 @@ ON
     jp.company_id = c.company_id
 WHERE  
     job_title_short = 'Data Analyst' AND
-    job_location = 'Anywhere' AND
+    job_location LIKE '%London%' AND
     salary_year_avg IS NOT NULL
 ORDER BY
     salary_year_avg DESC
@@ -41,13 +42,3 @@ ON
     sj.skill_id = s.skill_id
 ORDER BY
     salary_year_avg DESC;
-
-
-SELECT
-    *
-FROM
-    job_postings_fact
-WHERE
-    job_location LIKE '%Enfield, UK%'
-
-London, UK   (+2 others)
