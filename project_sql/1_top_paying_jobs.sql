@@ -12,7 +12,7 @@ SELECT
     job_location,
     job_schedule_type,
     salary_year_avg,
-    job_posted_date
+    DATE(job_posted_date)
 FROM    
     job_postings_fact jp
 LEFT JOIN
@@ -20,9 +20,11 @@ LEFT JOIN
 ON
     jp.company_id = c.company_id
 WHERE  
-    job_title_short = 'Data Analyst' AND
-    job_location LIKE '%London%' AND
-    salary_year_avg IS NOT NULL
+    job_title_short = 'Data Analyst'
+    AND job_location LIKE '%UK'
+    AND (job_title ILIKE '%analytic%' 
+        OR job_title ILIKE '%analyst%')
+    AND salary_year_avg IS NOT NULL
 ORDER BY
     salary_year_avg DESC
 LIMIT 10;

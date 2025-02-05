@@ -1,3 +1,32 @@
+/*
+Question: What skills are most optimal to learn for salary and demand?
+
+*/
+
+
+SELECT
+    sd.skill_id,
+    sd.skills,
+    COUNT(*) AS demand,
+    ROUND(AVG(salary_year_avg)) AS avg_salary
+FROM
+    job_postings_fact jp
+INNER JOIN skills_job_dim sj ON jp.job_id = sj.job_id
+INNER JOIN skills_dim sd ON sj.skill_id = sd.skill_id
+WHERE
+    job_title_short = 'Data Analyst'
+    AND salary_year_avg IS NOT NULL
+    AND job_work_from_home = TRUE
+    AND (job_title ILIKE '%analyst%' OR job_title ILIKE '%analytic%')
+GROUP BY sd.skill_id
+HAVING
+    COUNT(*) > 10
+ORDER BY
+    avg_salary DESC,
+    demand DESC
+LIMIT 25;
+
+-- longer format using CTEs and previous queries
 
 WITH skills_demand AS (
     SELECT 
@@ -52,25 +81,3 @@ ON
     skills_demand.skill_id = average_salary.skill_id
 ORDER BY
     demand DESC;
-
-
-SELECT
-    sd.skill_id,
-    sd.skills,
-    COUNT(*) AS demand,
-    ROUND(AVG(salary_year_avg)) AS avg_salary
-FROM
-    job_postings_fact jp
-INNER JOIN skills_job_dim sj ON jp.job_id = sj.job_id
-INNER JOIN skills_dim sd ON sj.skill_id = sd.skill_id
-WHERE
-    job_title_short = 'Data Analyst'
-    AND salary_year_avg IS NOT NULL
-    AND job_work_from_home = TRUE
-GROUP BY sd.skill_id
-HAVING
-    COUNT(*) > 10
-ORDER BY
-    avg_salary DESC,
-    demand DESC
-LIMIT 25;
